@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ContosoUniversity.DAL;
+using ContosoUniversity.Models;
+using PagedList;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
-using PagedList;
 
 namespace ContosoUniversity.Controllers
 {
@@ -34,13 +34,14 @@ namespace ContosoUniversity.Controllers
 
             var students = from s in db.Estudiantes
                            select s;
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 students = students.Where(s => s.LastName.Contains(searchString)
                                             || s.FirstMidName.Contains(searchString));
             }
 
-            
+
 
             switch (sortOrder)
             {
@@ -92,7 +93,7 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,LastName,FirstMidName,EnrollmentDate")] Student student)
         {
-           
+
             if (ModelState.IsValid)
             {
                 db.Estudiantes.Add(student);
@@ -140,7 +141,7 @@ namespace ContosoUniversity.Controllers
 
                 throw exception;
             }
-           
+
         }
 
         // GET: Student/Delete/5
@@ -167,13 +168,13 @@ namespace ContosoUniversity.Controllers
                 throw;
             }
 
-            
+
         }
 
         // POST: Student/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -187,18 +188,18 @@ namespace ContosoUniversity.Controllers
 
                 throw;
             }
-           
+
         }
 
         protected override void Dispose(bool disposing)
         {
-            
+
             if (disposing)
             {
                 db.Dispose();
             }
             base.Dispose(disposing);
-          
+
         }
     }
 }
