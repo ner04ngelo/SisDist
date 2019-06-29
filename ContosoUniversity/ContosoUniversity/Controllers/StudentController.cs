@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Data.Entity.Infrastructure;
 
 namespace ContosoUniversity.Controllers
 {
@@ -134,14 +135,14 @@ namespace ContosoUniversity.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                return View(student);
+               
             }
-            catch (Exception exception)
+            catch (RetryLimitExceededException)
             {
 
-                throw exception;
+                ModelState.AddModelError("", "No se puede agregar el registro");
             }
-
+            return View(student);
         }
 
         // GET: Student/Delete/5
@@ -183,7 +184,7 @@ namespace ContosoUniversity.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (RetryLimitExceededException)
             {
 
                 throw;
