@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace WcfService1
 {
@@ -32,36 +27,35 @@ namespace WcfService1
             return composite;
         }
 
-
-        SqlConnection con = new SqlConnection("Data Source= localhost; " +
-            "Initial Catalog= ContosoUniversity; " +
+        private SqlConnection con = new SqlConnection("Data Source= localhost; " +
+            "Initial Catalog= Northwind; " +
             "user id= sa; " +
             "password= 123; ");
 
 
-        public string ValidateLogin(string user, string pwd)
+        public string ValidateProducts(int ProductsId)
         {
             string mensaje = "";
 
-            List<string> UserPassword = new List<string>();
+            List<string> Products = new List<string>();
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuarios where Username= @user and PasswordUser = @pwd", con);
-                cmd.Parameters.AddWithValue("@user", user);
-                cmd.Parameters.AddWithValue("@pwd", pwd);
+                SqlCommand cmd = new SqlCommand("SELECT ProductName, QuantityPerUnit FROM Products where ProductID= @ProductsId", con);
+                cmd.Parameters.AddWithValue("@ProductsId", ProductsId);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                if (dt.Rows.Count > 0) {
-                    mensaje = "User Encontrado";
+                if (dt.Rows.Count > 0)
+                {
+                    mensaje = "Producto Encontrado";
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        string nombre = dt.Rows[i]["Username"].ToString();
-                        string pass = dt.Rows[i]["PasswordUser"].ToString();
+                        string ProductName = dt.Rows[i]["ProductName"].ToString();
+                        string QuantityPerUnit = dt.Rows[i]["QuantityPerUnit"].ToString();
 
-                        UserPassword.Add(nombre);
-                        UserPassword.Add(pass);
+                        Products.Add(ProductName);
+                        Products.Add(QuantityPerUnit);
                     }
                 }
                 else

@@ -23,7 +23,7 @@ namespace WcfService1
 
         [OperationContract]
 
-        string ValidateLogin(string user, string pwd);
+        string ValidateProducts(int ProductID);
     }
 
 
